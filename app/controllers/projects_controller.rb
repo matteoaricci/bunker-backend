@@ -1,7 +1,18 @@
 class ProjectsController < ApplicationController
 
+    def starter_columns
+        return ['Ice Box', 'To Do', 'Needs Review', 'Complete']
+    end
+
     def create 
         project = Project.create(title: params[:title], user_id: params[:user_id])
-        render json: project
+
+        starter_columns.each do |column| 
+            Column.create(title: column, project_id: project.id) 
+        end
+
+            # :include => {:projects => {:include => [:columns => {:include => [:tasks]}]}}
+
+        render json: project, :include => {:columns => {:include => [:tasks]}}
     end
 end
