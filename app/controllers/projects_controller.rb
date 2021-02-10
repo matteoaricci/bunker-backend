@@ -15,4 +15,9 @@ class ProjectsController < ApplicationController
 
         render json: project, :include => {:columns => {:include => [:tasks]}}
     end
+
+    def show 
+        project = Project.find(params[:id])
+        render json: project, :include => {:columns => {:include => [:tasks]}}
+    end
 end
