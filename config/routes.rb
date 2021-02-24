@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :project_members
+  resources :comments
   resources :tasks
   resources :columns
   resources :projects

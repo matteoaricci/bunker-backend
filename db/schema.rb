@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_01_163201) do
+ActiveRecord::Schema.define(version: 2021_02_24_214731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,9 +22,27 @@ ActiveRecord::Schema.define(version: 2021_02_01_163201) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.string "commentable_type", null: false
+    t.bigint "commentable_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+  end
+
+  create_table "project_members", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "project_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["project_id"], name: "index_project_members_on_project_id"
+    t.index ["user_id"], name: "index_project_members_on_user_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string "title"
-    t.integer "user_id"
+    t.integer "owner_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -34,6 +52,8 @@ ActiveRecord::Schema.define(version: 2021_02_01_163201) do
     t.integer "column_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "info"
+    t.datetime "due_date"
   end
 
   create_table "users", force: :cascade do |t|
@@ -46,4 +66,6 @@ ActiveRecord::Schema.define(version: 2021_02_01_163201) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "project_members", "projects"
+  add_foreign_key "project_members", "users"
 end
